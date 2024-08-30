@@ -1,75 +1,62 @@
-const welcomeMessage = () => {
-    const today = new Date().toDateString();
-    document.getElementById('welcomeMessage').textContent = `🤸🏾‍♀️ Welcome to Your Fitness Tracker 🥗 Today is ${today}`;
-};
-welcomeMessage();
+document.addEventListener('DOMContentLoaded', function() {
+    // Display the current date
+    const dateElement = document.getElementById('date');
+    const today = new Date();
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    dateElement.textContent = `Today is ${today.toLocaleDateString('en-US', options)}`;
 
-const displayWorkoutRoutine = () => {
-    const workoutInput = document.querySelector('#workoutInput').value;
-    const workoutList = document.querySelector('#workoutList');
-    const newWorkout = document.createElement('li');
-    newWorkout.textContent = workoutInput;
-    workoutList.appendChild(newWorkout);
-};
+    // Workout functionality
+    const workoutInput = document.getElementById('workout-input');
+    const workoutList = document.getElementById('workout-list');
+    const addWorkoutButton = document.getElementById('add-workout');
 
-document.querySelector('#submitWorkout').addEventListener('click', displayWorkoutRoutine);
+    addWorkoutButton.addEventListener('click', function() {
+        if (workoutInput.value) {
+            const li = document.createElement('li');
+            li.textContent = workoutInput.value;
+            workoutList.appendChild(li);
+            workoutInput.value = '';
+        }
+    });
 
-// ⚠️⚠️⚠️ Lesson 3: Creating and Removing Elements ⚠️⚠️⚠️
-// Function to add new fitness goals and remove completed ones
-// NOW LET'S DEBUG TO PREVENT DUPLICATE GOALS FROM BEING SUBMITTED 🚀
+    // Goal functionality
+    const goalInput = document.getElementById('goal-input');
+    const goalList = document.getElementById('goal-list');
+    const addGoalButton = document.getElementById('add-goal');
 
-const addNewGoal = () => {
-    const goalInput = document.querySelector('#goalInput').value;
-    const goalList = document.querySelector('#goalList');
-    
-    // ⚠️ Hint 1: Check for duplicates
-    // Use 'goalList' to get all existing goals and check if 'goalInput' matches any of them.
-    
-    // ⚠️ Hint 2: Prevent duplicates
-    // If a duplicate is found, display an alert to the user and don't add the goal to the list.
-    // If it's not a duplicate, proceed with adding it as a new goal.
-    
-    // ⚠️ Hint 3: Code structure
-    // You might want to wrap the duplicate-checking logic in an 'if' statement.
-    
-    // ⚠️ Hint 4: Event listener
-    // The event listener that removes goals when clicked is not related to this issue.
-    // Focus on preventing duplicates for now.
-    
-    const newGoal = document.createElement('li');
-    newGoal.textContent = goalInput;
-    goalList.appendChild(newGoal);
-};
+    addGoalButton.addEventListener('click', function() {
+        if (goalInput.value) {
+            const li = document.createElement('li');
+            li.textContent = goalInput.value;
+            goalList.appendChild(li);
+            goalInput.value = '';
+        }
+    });
 
-// Add event listener to the goal submit button
-document.querySelector('#submitGoal').addEventListener('click', addNewGoal);
+    // Water intake functionality
+    let waterCount = 0;
+    const waterCountElement = document.getElementById('water-count');
+    const incrementWaterButton = document.getElementById('increment-water');
+    const decrementWaterButton = document.getElementById('decrement-water');
 
-///
-let waterIntake = 0;
-const updateWaterIntake = (change) => {
-    waterIntake += change;
-    document.querySelector('#waterIntakeDisplay').textContent = `${waterIntake} glasses 💦`;
-};
+    incrementWaterButton.addEventListener('click', function() {
+        waterCount++;
+        waterCountElement.textContent = `${waterCount} glasses`;
+    });
 
-document.querySelector('#increaseWater').addEventListener('click', () => updateWaterIntake(1));
-document.querySelector('#decreaseWater').addEventListener('click', () => updateWaterIntake(-1));
+    decrementWaterButton.addEventListener('click', function() {
+        if (waterCount > 0) {
+            waterCount--;
+            waterCountElement.textContent = `${waterCount} glasses`;
+        }
+    });
 
-const updateProgressCharts = () => {
-    document.querySelector('#workoutProgress').textContent = "Updated workout progress...";
-    document.querySelector('#calorieIntakeProgress').textContent = "Updated calorie intake progress...";
-};
-
-updateProgressCharts();
-
-const toggleTheme = () => {
-    document.body.classList.toggle('dark-theme');
-};
-
-document.querySelector('#themeToggle').addEventListener('click', toggleTheme);
-
-const submitMealPlan = (event) => {
-    event.preventDefault(); 
-    alert('Meal plan submitted successfully! 🍴');
-};
-
-document.querySelector('#mealPlanForm').addEventListener('submit', submitMealPlan);
+    // Weekly Meal Plan functionality (Optional: Add any specific functionality)
+    const submitMealPlanButton = document.getElementById('submit-meal-plan');
+    submitMealPlanButton.addEventListener('click', function() {
+        const mondayMeal = document.getElementById('monday-meal').value;
+        const tuesdayMeal = document.getElementById('tuesday-meal').value;
+        // You can save the meal plan or display it as needed
+        alert(`Meal Plan Submitted:\nMonday: ${mondayMeal}\nTuesday: ${tuesdayMeal}`);
+    });
+});
