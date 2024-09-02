@@ -1,62 +1,78 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Display the current date
-    const dateElement = document.getElementById('date');
-    const today = new Date();
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-    dateElement.textContent = `Today is ${today.toLocaleDateString('en-US', options)}`;
+// Set the welcome message with the current date
+const welcomeMessage = () => {
+    const today = new Date().toDateString();
+    document.getElementById('welcomeMessage').textContent = `🤸🏾‍♀️ Welcome to Your Fitness Tracker 🥗 Today is ${today}`;
+};
+welcomeMessage();
 
-    // Workout functionality
-    const workoutInput = document.getElementById('workout-input');
-    const workoutList = document.getElementById('workout-list');
-    const addWorkoutButton = document.getElementById('add-workout');
+// Function to display workout routine
+const displayWorkoutRoutine = () => {
+    const workoutInput = document.querySelector('#workoutInput').value.trim();
+    const workoutList = document.querySelector('#workoutList');
+    
+    if (workoutInput === "") return; // Prevent adding empty workouts
+    
+    const newWorkout = document.createElement('li');
+    newWorkout.textContent = workoutInput;
+    workoutList.appendChild(newWorkout);
+    document.querySelector('#workoutInput').value = ""; // Clear input after adding
+};
 
-    addWorkoutButton.addEventListener('click', function() {
-        if (workoutInput.value) {
-            const li = document.createElement('li');
-            li.textContent = workoutInput.value;
-            workoutList.appendChild(li);
-            workoutInput.value = '';
-        }
-    });
+document.querySelector('#submitWorkout').addEventListener('click', displayWorkoutRoutine);
 
-    // Goal functionality
-    const goalInput = document.getElementById('goal-input');
-    const goalList = document.getElementById('goal-list');
-    const addGoalButton = document.getElementById('add-goal');
+// Function to add new fitness goals and prevent duplicates
+const addNewGoal = () => {
+    const goalInput = document.querySelector('#goalInput').value.trim();
+    const goalList = document.querySelector('#goalList');
 
-    addGoalButton.addEventListener('click', function() {
-        if (goalInput.value) {
-            const li = document.createElement('li');
-            li.textContent = goalInput.value;
-            goalList.appendChild(li);
-            goalInput.value = '';
-        }
-    });
+    if (goalInput === "") return; // Prevent adding empty goals
 
-    // Water intake functionality
-    let waterCount = 0;
-    const waterCountElement = document.getElementById('water-count');
-    const incrementWaterButton = document.getElementById('increment-water');
-    const decrementWaterButton = document.getElementById('decrement-water');
+    // Check for duplicate goals
+    const existingGoals = Array.from(goalList.getElementsByTagName('li')).map(li => li.textContent);
+    
+    if (existingGoals.includes(goalInput)) {
+        alert("Goal already exists!"); // Display alert if duplicate is found
+    } else {
+        const newGoal = document.createElement('li');
+        newGoal.textContent = goalInput;
+        goalList.appendChild(newGoal);
+    }
+    
+    document.querySelector('#goalInput').value = ""; // Clear input after adding
+};
 
-    incrementWaterButton.addEventListener('click', function() {
-        waterCount++;
-        waterCountElement.textContent = `${waterCount} glasses`;
-    });
+// Add event listener to the goal submit button
+document.querySelector('#submitGoal').addEventListener('click', addNewGoal);
 
-    decrementWaterButton.addEventListener('click', function() {
-        if (waterCount > 0) {
-            waterCount--;
-            waterCountElement.textContent = `${waterCount} glasses`;
-        }
-    });
+// Water intake update function
+let waterIntake = 0;
+const updateWaterIntake = (change) => {
+    waterIntake += change;
+    document.querySelector('#waterIntakeDisplay').textContent = `${waterIntake} glasses 💦`;
+};
 
-    // Weekly Meal Plan functionality (Optional: Add any specific functionality)
-    const submitMealPlanButton = document.getElementById('submit-meal-plan');
-    submitMealPlanButton.addEventListener('click', function() {
-        const mondayMeal = document.getElementById('monday-meal').value;
-        const tuesdayMeal = document.getElementById('tuesday-meal').value;
-        // You can save the meal plan or display it as needed
-        alert(`Meal Plan Submitted:\nMonday: ${mondayMeal}\nTuesday: ${tuesdayMeal}`);
-    });
-});
+document.querySelector('#increaseWater').addEventListener('click', () => updateWaterIntake(1));
+document.querySelector('#decreaseWater').addEventListener('click', () => updateWaterIntake(-1));
+
+// Function to update progress charts (mockup)
+const updateProgressCharts = () => {
+    document.querySelector('#workoutProgress').textContent = "Updated workout progress...";
+    document.querySelector('#calorieIntakeProgress').textContent = "Updated calorie intake progress...";
+};
+
+updateProgressCharts();
+
+// Toggle theme between light and dark
+const toggleTheme = () => {
+    document.body.classList.toggle('dark-theme');
+};
+
+document.querySelector('#themeToggle').addEventListener('click', toggleTheme);
+
+// Submit meal plan form and prevent default submission behavior
+const submitMealPlan = (event) => {
+    event.preventDefault(); 
+    alert('Meal plan submitted successfully! 🍴');
+};
+
+document.querySelector('#mealPlanForm').addEventListener('submit', submitMealPlan);
